@@ -1,0 +1,18 @@
+## Spring的BeanDefinition
+
+> 阿里面试被问到Spring的BeanDefinition，有点懵，大概能猜到是什么，但因为没有看过源代码，所以不太确定。说明学习不够深入，在此学习一下什么是Spring的BeanDefinition。
+
+**BeanDefinition通常被称为Spring中的class**
+
+对象通过class来进行实例化，因为class对象承载着对象所具有的属性、方法以及父子继承的关系等信息。在Spring容器中管理着的Bean组件，也是经过一个实例化的过程，而这个实例化过程，仅仅依靠class对象所拥有的信息是远远不够的，Bean组件要解决的还有作用域，实例化条件，组件依赖等一系列问题，Spring将这样的一个对象封装在BeanDefinition对象中。
+
+**因此，我们可以这样理解，Bean是高级的实例，BeanDefinition是高级的class。**
+
+在Spring容器启动的过程中，会将Bean解析成Spring内部的BeanDefinition结构。
+
+下图为Spring中BeanDefinition的源码结构部分截图：
+
+![1556273860792](E:\git\知识点整理\figure\BeanDefinitionStructure.png)
+
+可以看到上面的截图中有很多属性和方法都很熟悉，例如类名、scope、属性、构造函数参数列表、依赖的bean、是否是单例类、是否是懒加载等。其实就是将Bean的定义信息存储到这个BeanDefinition相应的属性中，后面对Bean的操作就直接对BeanDefinition进行，例如拿到这个BeanDefinition后，可以根据里面的类名、构造函数、构造函数参数，使用反射进行对象创建。BeanDefinition是一个接口，是一个抽象的定义，实际使用的是其实现类，如ChildBeanDefinitino，RootBeanDefinition，GenericBeanDefinition等。BeanDefinition继承了AttributeAccessor，说明它具有处理属性的能力；BeanDefinition继承了BeanMetadataElement，说明它可以持有Bean元数据元素，作用是可以持有XML文件的一个bean标签对应的Object。
+
